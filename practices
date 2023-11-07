@@ -1,0 +1,52 @@
+// This trigger executes before records of the "Account" object are inserted into the Salesforce database.
+
+//declare Apex trigger named "AccountTrigger" that operates on the "Account" object
+trigger AccountTrigger on Account (before insert){
+//Trigger.new is a trigger contact variable
+  for(Account acc: Trigger.new){    //This sObject list is only available in insert, update, and undelete triggers.  Trigger.new is a collection of records
+// set the description field with test description value
+     acc.Description ='test description';
+  }
+}
+
+
+/*trigger context variables: Trigger.new; Trigger.isInsert; Trigger.isUpdate; Trigger.isDelete;Trigger.isBefore;Trigger.isAfter;Trigger.Old; Trigger.oldMap;
+trigger context variables are special variables that provide information about the context in which a trigger is executed */
+
+//combines an Apex trigger with a separate Apex class to handle specific logic when new Account records are inserted into Salesforce. It sets the 'Hot' rating for Accounts with the 'Media' industry during the "before insert" phase.
+
+public class AccountTriggerHandler{
+//accepts a list of Account records (newList) as its paramete
+  public static void beforeInsert(List<Account> newList) {
+  
+//It iterates through the list of Account records (newList) and checks if each Account has a non-null Industry field with the value 'Media'  
+   for(Account acc: newList){
+     if(acc.Industry != null && acc.Industry == 'Media') {
+     
+     //If an Account meets this condition, it sets the Rating field of that Account to 'Hot'
+        acc.Rating ='Hot';
+     }
+       }
+  }
+}
+
+
+trigger AccountTrigger on Account (before insert, after insert) {
+    if (Trigger.isInsert) {
+        if (Trigger.isBefore) {
+
+/* If the trigger is executing "before insert," it calls the beforeInsert method from the AccountTriggerHandler class and passes in Trigger.New, which is the list of new Account records that are being inserted. 
+This will apply the logic defined in beforeInsert to set the 'Hot' rating for Accounts in the 'Media' industry before they are inserted into the database.  */ 
+            AccountTriggerHandler.beforeInsert(Trigger.New);
+        }
+        else if (Trigger.isAfter) {
+            // Logic for after insert (you can add your specific logic here)
+        }
+    }
+}
+
+
+
+
+
+
