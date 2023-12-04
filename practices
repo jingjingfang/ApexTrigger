@@ -55,6 +55,23 @@ This will apply the logic defined in beforeInsert to set the 'Hot' rating for Ac
 }
 
 
+/*Steps: trigger--> create a new list with SOQL--> for loop each account from new created list--> assign the opps from each account to a new opp
+
+trigger SoqlTriggerBulk on Account(after update) {  
+    // Perform SOQL query once.    
+    // Get the accounts and their related opportunities.
+    List<Account> acctsWithOpps = 
+        [SELECT Id,(SELECT Id,Name,CloseDate FROM Opportunities) 
+         FROM Account WHERE Id IN :Trigger.new];
+    // Iterate over the returned accounts    
+    for(Account a : acctsWithOpps) {   //look each account
+
+/*Opportunity[] relatedOpps: declares a variable named relatedOpps of type Opportunity[], which is an array of Opportunity objects. It's used to store the related opportunities retrieved for a specific Account.*/
+/*access the child records (Opportunities) related to a specific parent record. a is an instance of the Account object within the loop, and Opportunities is the relationship name*/
+        Opportunity[] relatedOpps = a.Opportunities;    
+        // Do some other processing
+    }
+}
 
 
 
