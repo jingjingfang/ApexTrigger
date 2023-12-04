@@ -1,8 +1,17 @@
+
+//trigger one record
+trigger MyTriggerNotBulk on Account(before insert) {
+    Account a = Trigger.new[0];
+    a.Description = 'New description';
+}
+
+
+
 // This trigger executes before records of the "Account" object are inserted into the Salesforce database.
 
-//declare Apex trigger named "AccountTrigger" that operates on the "Account" object
-trigger AccountTrigger on Account (before insert){
-//Trigger.new is a trigger contact variable
+//declare Apex trigger named "MyTriggerBulk" that operates on the "Account" object
+trigger MyTriggerBulk on Account (before insert){   
+//bulkified version
   for(Account acc: Trigger.new){    //This sObject list is only available in insert, update, and undelete triggers.  Trigger.new is a collection of records
 // set the description field with test description value
      acc.Description ='test description';
