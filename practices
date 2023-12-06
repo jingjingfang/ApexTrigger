@@ -112,3 +112,15 @@ public static void handleAfterInsert(List<Account> newAccounts){  //Takes a list
     }
 }
 
+
+//create a trigger the alert an error message if the account name is identical
+trigger accountDupication on Account (before insert) {
+    for(Account acc:Trigger.new) {
+        List<Account> newAcc=[SELECT ID, Name from Account where Name=: acc.Name];  //ensures that it matches the value of the Name field with the value of acc.Name.
+        if(newAcc.size()>0) {
+            acc.Name.addError('Duplicate Account');
+        }
+    }
+
+}
+
