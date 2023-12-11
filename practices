@@ -124,3 +124,17 @@ trigger accountDupication on Account (before insert) {
 
 }
 
+//Trigger.new contains all the records that were inserted in insert or update triggers. can contain only one record or multiple records
+//Trigger.old provides the old version of sObjects before they were updated in update triggers, or a list of deleted sObjects in delete triggers.
+
+
+
+
+// Trigger and Handlers
+/*The trigger handler is a class that contains the logic for processing events and executing appropriate actions. It acts as a bridge between the trigger and the business logic.*/
+
+
+
+
+
+
