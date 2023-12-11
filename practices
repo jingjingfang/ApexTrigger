@@ -124,16 +124,37 @@ trigger accountDupication on Account (before insert) {
 
 }
 
+// Trigger and Handlers
+
 //Trigger.new contains all the records that were inserted in insert or update triggers. can contain only one record or multiple records
 //Trigger.old provides the old version of sObjects before they were updated in update triggers, or a list of deleted sObjects in delete triggers.
-//the Trigger Handler pattern is to separate the trigger logic into a separate class from the trigger itself.The handler class is where the actual logic of the trigger is implemented.   
+/*A trigger handler is a design pattern used to organize and manage the code logic within triggers. 
+It separate the trigger logic into a separate class from the trigger itself. */
 
-
-
-
-
-// Trigger and Handlers
 /*The trigger handler is a class that contains the logic for processing events and executing appropriate actions. It acts as a bridge between the trigger and the business logic.*/
+
+trigger AccountTrigger on Account (before insert) {   //The trigger AccountTrigger is set to run before insert on the Account object.
+    AccountTriggerHandler.beforeInsert(Trigger.new);   //The trigger delegates the logic to the beforeInsert method in the AccountTriggerHandler class. delegation" refers to a design pattern where an object passes on a task to another object to perform. 
+}
+
+public class AccountTriggerHandler {
+    public static void beforeInsert(List<Account> newAccounts) {  //The beforeInsert method iterates through the list of new accounts (Trigger.new) and performs some basic logic.
+        for (Account acc : newAccounts) {
+            // Example: Ensure that the account name is not empty
+            if (String.isBlank(acc.Name)) {      //if the account name is blank and adds an error to prevent insertion if it is.
+                acc.addError('Account Name cannot be blank.');   
+            }
+
+                       acc.CustomField__c = 'Default Value';   //It sets a default value for a custom field (CustomField__c).
+
+            // Additional custom logic can be added here
+        }
+    }
+}
+
+
+
+
 
 
 
